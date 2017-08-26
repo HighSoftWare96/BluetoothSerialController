@@ -4,7 +4,7 @@ import { LoadingIndicator } from "nativescript-loading-indicator";
 @Injectable()
 export class BluetoothService {
     private bluetooth;
-    public deviceUUIDs = [];
+    private blthDevices: any = [];
     private loader = new LoadingIndicator();
 
     constructor() {
@@ -20,10 +20,13 @@ export class BluetoothService {
             if (enabled) {
                 // parte la scansione (sempre promise)
                 return this.bluetooth.startScanning({
-                    serviceUUIDs: this.deviceUUIDs,
+                    serviceUUIDs: [],
                     seconds: 4,
                     onDiscovered: function (host) {
-                        this.deviceUUIDs.push(host )
+                        // da rivedere
+                        alert(host.name);
+                        // aggiunta all'array
+                        this.blthDevices.push(host);
                     }.bind(this)
                 }).then(function () {
                     this.loader.hide();
@@ -44,5 +47,9 @@ export class BluetoothService {
         return this.bluetooth.isBluetoothEnabled().then(function (enabled) {
             return enabled;
         });
+    }
+    
+    public getDevices() {
+        return this.blthDevices;
     }
 }
