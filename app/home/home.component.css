@@ -1,0 +1,12 @@
+StackLayout {
+    margin: auto;
+    padding: 80;
+}
+Image {
+    height: 45%;
+    width: 30%;
+}
+Button {
+    width: 38%;
+    padding: 20;
+}
