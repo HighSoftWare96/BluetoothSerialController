@@ -2,9 +2,9 @@
     <ActionBar class="action-bar" title="Choose a device">
     </ActionBar>
     <StackLayout>
-        <ListView [items]="this.bluetoothService.deviceUUIDs">
+        <ListView [items]="this.bluetoothService.getDevices()">
             <ng-template let-item="item">
-                <Label [text]="item"></Label>
+                <Label [text]="item.name"></Label>
             </ng-template>
         </ListView>
     </StackLayout>
