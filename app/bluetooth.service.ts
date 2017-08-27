@@ -1,55 +1,62 @@
 import { Injectable } from '@angular/core';
 import { LoadingIndicator } from "nativescript-loading-indicator";
+import { DialogService } from './dialog.service';
 
 @Injectable()
 export class BluetoothService {
+
     private bluetooth;
     private blthDevices: any = [];
     private loader = new LoadingIndicator();
 
-    constructor() {
+    constructor(private dialogService : DialogService) {
         this.bluetooth = require("nativescript-bluetooth");
     }
 
-    public startAndScan() {
-        this.loader.show({
+    public startAndScan(loadingMode: boolean) {
+        loadingMode ? this.loader.show({
             message: 'Enabling and scanning...'
-        });
+        }) : null;
         // abilitazione android
         return this.bluetooth.enable().then(function (enabled) {
             if (enabled) {
+                // azzero array
+                this.blthDevices = [];
                 // parte la scansione (sempre promise)
                 return this.bluetooth.startScanning({
                     serviceUUIDs: [],
                     seconds: 4,
                     onDiscovered: function (host) {
                         // da rivedere
-                        alert(host.name);
+                        alert(host.UUID);
                         // aggiunta all'array
                         this.blthDevices.push(host);
                     }.bind(this)
                 }).then(function () {
-                    this.loader.hide();
+                    // schermata di loading solo se è attiva la modalità di loading
+                    loadingMode ? this.loader.hide() : null;
                 }.bind(this), function (err) {
-                    this.loader.hide();
+                    loadingMode ? this.loader.hide() : null;
                     throw new Error("Bluetooth error");
                 }.bind(this));
             }
             else {
-                this.loader.hide();
+                loadingMode ? this.loader.hide() : null;
                 throw new Error("Bluetooth disabled");
             }
         }.bind(this));
 
     }
 
-    public isEnabled(): boolean {
-        return this.bluetooth.isBluetoothEnabled().then(function (enabled) {
-            return enabled;
-        });
+    public isEnabled(): Promise<boolean> {
+        return this.bluetooth.isBluetoothEnabled();
     }
-    
+
     public getDevices() {
         return this.blthDevices;
+    }
+
+    public getBlth(): any {
+        return this.bluetooth;
     }
 }

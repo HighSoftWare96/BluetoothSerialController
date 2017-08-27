@@ -7,7 +7,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { AppComponent } from "./app.component";
 import { routes, navigatableComponents } from "./app.routing";
 import { BluetoothService } from './bluetooth.service';
-
+import { DialogService } from './dialog.service';
 
 @NgModule({
   imports: [
@@ -23,7 +23,8 @@ import { BluetoothService } from './bluetooth.service';
   ],
   bootstrap: [AppComponent],
   providers: [
-    BluetoothService
+    BluetoothService,
+    DialogService
   ]
 })
 export class AppModule {

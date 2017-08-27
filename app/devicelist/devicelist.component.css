@@ -1,0 +1,21 @@
+.device-label {
+    padding: 20;
+    margin: 5;
+    border-style: solid;
+    border-color: #C1C1C1;
+    border-width: 0px 0px 2px 0px;
+}
+.device-name {
+    font-weight: 500;
+}
+
+.no-device {
+    margin-top: 30%;
+}
+.no-device Image {
+    height: 30%;
+    width: 25%;
+}
+.no-device Label {
+    text-align: center;
+}

@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { BluetoothService } from "../bluetooth.service"
 import { Router } from "@angular/router";
+import { AsyncPipe } from '@angular/common';
+import { DialogService } from '../dialog.service';
 
 @Component({
     selector: "home",
@@ -8,12 +10,12 @@ import { Router } from "@angular/router";
     styleUrls: ['home/home.component.css']
 })
 export class HomeComponent {
-    constructor(private blthService: BluetoothService, private router: Router) {
+    constructor(private blthService: BluetoothService, private router: Router, private dialogService : DialogService) {
 
     }
 
-    private imageOn = "~/images/home_on.png";
-    private imageOff = "~/images/home_off.png";
+    public imageOn = "~/images/home_on.png";
+    public imageOff = "~/images/home_off.png";
     public imageBlth = this.imageOff;
 
 
@@ -21,14 +23,12 @@ export class HomeComponent {
 
         this.imageBlth = this.imageOn;
         // promises
-        this.blthService.startAndScan().then(function () {
+        this.blthService.startAndScan(true).then(function () {
             this.router.navigate(["/list"]);
         }.bind(this)).catch(function (err) {
-            alert(err.message);
+            this.dialogService.alert(err.message, "Error");
             this.imageBlth = this.imageOff;
         }.bind(this));
-
-
 
     }
 
