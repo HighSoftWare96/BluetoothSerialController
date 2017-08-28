@@ -1,6 +1,7 @@
 <Page.actionBar>
     <ActionBar class="action-bar" title="Choose a device">
     </ActionBar>
+<<<<<<< HEAD
     <PullToRefresh (refresh)="refreshList($event)">
         <ListView [items]="this.blthService.getDevices()">
             <ng-template let-item="item">
@@ -8,6 +9,12 @@
                     <Label [text]='item.name == null ? "Unknown device name" : item.name' class="device-name h3"></Label>
                     <Label [text]='item.UUID' class="device-uuid h4"></Label>
                 </StackLayout>
+=======
+    <StackLayout>
+        <ListView [items]="this.bluetoothService.deviceUUIDs">
+            <ng-template let-item="item">
+                <Label [text]="item"></Label>
+>>>>>>> parent of 5c13ca6... getDevices() from bluetooth service
             </ng-template>
         </ListView>
     </PullToRefresh>
