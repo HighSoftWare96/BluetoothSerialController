@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { LoadingIndicator } from "nativescript-loading-indicator";
 import { DialogService } from './dialog.service';
+import bluetooth = require('nativescript-bluetooth');
+import { Peripheral } from 'nativescript-bluetooth';
 
 @Injectable()
 export class BluetoothService {
-
-    private bluetooth;
-    private blthDevices: any[] = [];
+    
+    private blthDevices: Peripheral[] = [];
     private loader = new LoadingIndicator();
 
     constructor(private dialogService : DialogService) {
-        this.bluetooth = require("nativescript-bluetooth");
     }
 
     public startAndScan(loadingMode: boolean) {
@@ -18,14 +18,14 @@ export class BluetoothService {
             message: 'Enabling and scanning...'
         }) : null;
         // abilitazione android
-        return this.bluetooth.enable().then(function (enabled) {
+        return bluetooth.enable().then(function (enabled) {
             if (enabled) {
                 // azzero array
                 this.blthDevices = [];
                 // parte la scansione (sempre promise)
-                return this.bluetooth.startScanning({
+                return bluetooth.startScanning({
                     seconds: 10,
-                    onDiscovered: (host: any) => {
+                    onDiscovered: (host: Peripheral) => {
                         alert(host.UUID);
                         // aggiunta all'array
                         this.blthDevices.push(host);
@@ -47,7 +47,7 @@ export class BluetoothService {
     }
 
     public isEnabled(): Promise<boolean> {
-        return this.bluetooth.isBluetoothEnabled();
+        return bluetooth.isBluetoothEnabled();
     }
 
     public getDevices() {
