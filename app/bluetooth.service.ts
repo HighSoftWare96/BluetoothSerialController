@@ -25,9 +25,8 @@ export class BluetoothService {
                 // parte la scansione (sempre promise)
                 return this.bluetooth.startScanning({
                     serviceUUIDs: [],
-                    seconds: 4,
+                    seconds: 10,
                     onDiscovered: function (host) {
-                        // da rivedere
                         alert(host.UUID);
                         // aggiunta all'array
                         this.blthDevices.push(host);
@@ -54,9 +53,5 @@ export class BluetoothService {
 
     public getDevices() {
         return this.blthDevices;
-    }
-
-    public getBlth(): any {
-        return this.bluetooth;
     }
 }

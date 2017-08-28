@@ -2,9 +2,9 @@
     <ActionBar class="action-bar" title="Choose a device">
     </ActionBar>
     <PullToRefresh (refresh)="refreshList($event)">
-        <ListView [items]="this.blthService.getDevices()" (itemTap)="itemTap(item.UUID)">
-            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <StackLayout [class.odd]="odd" [class.even]="even" class="device-label">
+        <ListView [items]="this.blthService.getDevices()">
+            <ng-template let-item="item">
+                <StackLayout class="device-label">
                     <Label [text]='item.name == null ? "Unknown device name" : item.name' class="device-name h3"></Label>
                     <Label [text]='item.UUID' class="device-uuid h4"></Label>
                 </StackLayout>
