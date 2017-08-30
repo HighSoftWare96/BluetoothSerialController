@@ -9,6 +9,14 @@
     font-weight: 500;
 }
 
+.device-desc {
+    margin-left: 7%; 
+}
+.device-signal {
+    width: 15%;
+    height: 15%;
+}
+
 .no-device {
     margin-top: 30%;
 }
@@ -19,3 +27,4 @@
 .no-device Label {
     text-align: center;
 }
+

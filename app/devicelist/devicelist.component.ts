@@ -23,7 +23,7 @@ export class DeviceListComponent {
         });
         setTimeout(function () {
             pullRefresh.refreshing = false;
-        }, 10000);
+        }, 20000);
     }
 
 }

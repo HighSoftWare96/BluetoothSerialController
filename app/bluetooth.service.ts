@@ -1,32 +1,37 @@
 import { Injectable } from '@angular/core';
 import { LoadingIndicator } from "nativescript-loading-indicator";
 import { DialogService } from './dialog.service';
-import bluetooth = require('nativescript-bluetooth');
+import * as bluetooth from 'nativescript-bluetooth';
+import { ObservableArray } from "tns-core-modules/data/observable-array/observable-array";
 import { Peripheral } from 'nativescript-bluetooth';
+import { AsyncPipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Injectable()
 export class BluetoothService {
-    
-    private blthDevices: Peripheral[] = [];
+
+    private blthDevices: ObservableArray<Peripheral> = new ObservableArray<Peripheral>();
     private loader = new LoadingIndicator();
 
-    constructor(private dialogService : DialogService) {
+    constructor(private dialogService: DialogService) {
     }
 
     public startAndScan(loadingMode: boolean) {
         loadingMode ? this.loader.show({
-            message: 'Enabling and scanning...'
+            message: 'Scanning, please wait...'
         }) : null;
         // abilitazione android
         return bluetooth.enable().then(function (enabled) {
             if (enabled) {
                 // azzero array
-                this.blthDevices = [];
+                this.blthDevices = new ObservableArray<Peripheral>();
                 // parte la scansione (sempre promise)
                 return bluetooth.startScanning({
-                    seconds: 10,
+                    serviceUUIDs: [],
+                    seconds: 4,
                     onDiscovered: (host: Peripheral) => {
-                        alert(host.UUID);
+                        loadingMode ? alert(host.UUID) : null;
                         // aggiunta all'array
                         this.blthDevices.push(host);
                     }
@@ -46,11 +51,32 @@ export class BluetoothService {
 
     }
 
-    public isEnabled(): Promise<boolean> {
-        return bluetooth.isBluetoothEnabled();
+    public connect(uuid: string) {
+        this.loader.show({
+            message: 'Connecting, please wait...'
+        });
+        bluetooth.connect({
+            UUID: uuid,
+            onConnected: function (peripheral) {
+                this.loader.hide();
+                alert("Periperhal connected with UUID: " + peripheral.UUID);
+
+                // the peripheral object now has a list of available services:
+                peripheral.services.forEach(function (service) {
+                    alert("service found: " + JSON.stringify(service));
+                });
+            },
+            onDisconnected: function (peripheral) {
+                alert("Periperhal disconnected with UUID: " + peripheral.UUID);
+            }
+        });
     }
 
-    public getDevices() {
+    public isEnabled(): Observable<boolean> {   
+        return Observable.fromPromise(bluetooth.isBluetoothEnabled());
+    }
+
+    public getDevices(): ObservableArray<Peripheral> {
         return this.blthDevices;
     }
 }

@@ -1,20 +1,18 @@
 <Page.actionBar>
     <ActionBar class="action-bar" title="Choose a device">
     </ActionBar>
-<<<<<<< HEAD
     <PullToRefresh (refresh)="refreshList($event)">
         <ListView [items]="this.blthService.getDevices()">
             <ng-template let-item="item">
-                <StackLayout class="device-label">
-                    <Label [text]='item.name == null ? "Unknown device name" : item.name' class="device-name h3"></Label>
-                    <Label [text]='item.UUID' class="device-uuid h4"></Label>
+                <StackLayout orientation="horizontal"  class="device-label" (tap) = "this.blthService.connect(item.uuid)">
+                    <Image src="~/images/signal_3.png" class="device-signal"></Image>
+                    <StackLayout class="device-desc">
+                        <Label [text]='item.name == null ? "Unknown device name" : item.name' class="device-name h3"></Label>
+                        <Label [text]='item.UUID' class="device-uuid h4"></Label>
+                        <Label [text]='item.RSSI' class="device-uuid h4"></Label>
+                    </StackLayout>
                 </StackLayout>
-=======
-    <StackLayout>
-        <ListView [items]="this.bluetoothService.deviceUUIDs">
-            <ng-template let-item="item">
-                <Label [text]="item"></Label>
->>>>>>> parent of 5c13ca6... getDevices() from bluetooth service
+
             </ng-template>
         </ListView>
     </PullToRefresh>

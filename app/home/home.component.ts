@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { BluetoothService } from "../bluetooth.service"
 import { Router } from "@angular/router";
-import { AsyncPipe } from '@angular/common';
 import { DialogService } from '../dialog.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: "home",
