@@ -13,8 +13,12 @@ export class BluetoothService {
 
     private blthDevices: ObservableArray<Peripheral> = new ObservableArray<Peripheral>();
     private loader = new LoadingIndicator();
+    // TODO variabile isenabled
+    public isBluetoothEnabled: boolean;
 
     constructor(private dialogService: DialogService) {
+        // TODO linking dell'observable alla variabile? Dove va fatto??
+        this.listenToBluetoothEnabled().subscribe(enabled => this.isBluetoothEnabled = enabled);
     }
 
     public startAndScan(loadingMode: boolean) {
@@ -72,8 +76,23 @@ export class BluetoothService {
         });
     }
 
-    public isEnabled(): Observable<boolean> {   
-        return Observable.fromPromise(bluetooth.isBluetoothEnabled());
+    private listenToBluetoothEnabled(): Observable<boolean> {   
+        // TODO da testare
+        return new Observable(observer => {
+            bluetooth.isBluetoothEnabled().then(enabled => observer.next(enabled))
+            let intervalHandle = setInterval(
+                () => {
+                    bluetooth.isBluetoothEnabled().then(enabled => observer.next(enabled))
+                }
+            , 1000);
+            // stop checking every second on unsubscribe
+            return () => clearInterval(intervalHandle);
+        }).distinctUntilChanged();
+    }
+    
+    // TODO funzione...
+    public isEnabled(): boolean {
+        this.listenToBluetoothEnabled().subscribe(enabled => return enabled);
     }
 
     public getDevices(): ObservableArray<Peripheral> {
